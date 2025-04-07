@@ -40,9 +40,6 @@ const register = async (req, res, next) => {
     }
 }
 
-
-
-
 const login = async (req, res, next) => {
 
     try {
@@ -100,20 +97,11 @@ const checkToken = async (req, res, next) => {
         const {isToken, email} = req.body
         const validToken = await User.findOne({email})        
 
-        if(isToken !== validToken.token){
+        if(isToken !== process.env.CODE){
             console.log(false);
            throw new Error('Token is not valid, please try again')
             
         }
-
-        await User.findByIdAndUpdate(validToken._id, {
-            $set: {status: true}
-        })
-
-        if (isUserPresent.status === true) {
-            const accessToken = jwt.sign({_id: isUserPresent._id}, config.accessTokenSecret, {
-                expiresIn : '1d'
-            });
 
             res.cookie('accessToken', accessToken, {
                 maxAge: 1000 * 60 * 60 *24 * 30,
@@ -121,10 +109,10 @@ const checkToken = async (req, res, next) => {
                 sameSite: 'none',
                 secure: true
             })
+            
+            return res.status(200).json({message: "Token successfully verified"})
         }
-
-        return res.status(200).json({message: "Token successfully verified"})
-    } catch (error) {
+        catch (error) {
         next(error)
     }
 }
