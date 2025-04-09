@@ -97,13 +97,12 @@ const checkToken = async (req, res, next) => {
         const {isToken, email} = req.body
         const validToken = await User.findOne({email})        
 
-        if(isToken !== process.env.CODE){
-            console.log(false);
+        if(isToken !== validToken.token){
            throw new Error('Token is not valid, please try again')
-            
         }
 
-            res.cookie('accessToken', accessToken, {
+
+            res.cookie('accessToken', isToken, {
                 maxAge: 1000 * 60 * 60 *24 * 30,
                 httpOnly: true,
                 sameSite: 'none',
