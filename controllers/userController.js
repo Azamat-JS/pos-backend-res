@@ -25,7 +25,7 @@ const register = async (req, res, next) => {
     
         const newUser = await User.create({name, phone, email, password, role})
         
-        const payload = { email: newUser.email, role: newUser.role };
+        const payload = { email: newUser.email, role: newUser.role, _id: newUser._id };
         const accessToken = jwt.sign(payload, config.accessTokenSecret, {expiresIn : '1d'});
         
         newUser.token = accessToken;
