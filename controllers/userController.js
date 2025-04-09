@@ -102,11 +102,7 @@ const checkToken = async (req, res, next) => {
         await User.findByIdAndUpdate(validToken._id, {
             $set: { status: true }
         })
-
-     console.log(token);
-     console.log(validToken.token);
-     
-     
+   
 
             res.cookie('accessToken', token, {
                 maxAge: 1000 * 60 * 60 *24 * 30,
