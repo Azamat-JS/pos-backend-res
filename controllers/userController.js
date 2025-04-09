@@ -90,11 +90,11 @@ const login = async (req, res, next) => {
 
 const checkToken = async (req, res, next) => {
     try {
-        const {isToken, email} = req.body
+        const {token, email} = req.body
         const validToken = await User.findOne({email})        
         
-        if(isToken !== validToken.token){
-            console.log(isToken);
+        if(token !== validToken.token){
+            console.log(token);
            console.log(validToken.token);        
             throw new Error('Token is not valid, please try again')   
         }
@@ -103,12 +103,12 @@ const checkToken = async (req, res, next) => {
             $set: { status: true }
         })
 
-     console.log(isToken);
+     console.log(token);
      console.log(validToken.token);
      
      
 
-            res.cookie('accessToken', isToken, {
+            res.cookie('accessToken', token, {
                 maxAge: 1000 * 60 * 60 *24 * 30,
                 httpOnly: true,
                 sameSite: 'none',
